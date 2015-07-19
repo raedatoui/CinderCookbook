@@ -14,44 +14,22 @@ void CinderCookbookApp::setup()
     mScale = 1.0f;
     mDragged = false;
     
-    mParams = params::InterfaceGl("Parameters", Vec2i(200,400));
-    
-    mParams.addParam( "Cube Size", &mObjSize, "min=0.1 max=20.5 step=0.5 keyIncr=z keyDecr=Z" );
-    mParams.addParam( "Cube Rotation", &mObjOrientation ); // Quatf type
-    mParams.addParam( "Cube Color", &mColor, "" ); // ColorA
-    mParams.addSeparator(); // add horizontal line separating controls
-    mParams.addParam( "Light Direction", &mLightDirection, "" ); // Vec3f
-    mParams.addParam( "String ", &mString, "" ); // string
-    mParams.addButton("Save Config", std::bind(&CinderCookbookApp::saveConfig, this));
-    
     mHostIP = "127.0.0.1";
     mHostPort = 1234;
-}
-
-void CinderCookbookApp::loadConfig()
-{
-    try {
-        XmlTree doc( loadFile( getAppPath() / fs::path("config.xml") ) );
-        XmlTree &generalNode = doc.getChild( "general" );
-        
-        mHostIP = generalNode.getChild("hostIP").getValue();
-        mHostPort = generalNode.getChild("hostPort").getValue<int>();
-    } catch(Exception e) {
-        console() << "ERROR: loading/reading configuration file." << endl;
-    }
-}
-
-void CinderCookbookApp::saveConfig()
-{
-    std::string beginXmlStr( "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" );
-    XmlTree doc( beginXmlStr );
     
-    XmlTree generalNode;
-    generalNode.setTag("general");
-    generalNode.push_back( XmlTree("hostIP", mHostIP) );
-    generalNode.push_back( XmlTree("hostPort", toString(mHostPort)) );
-    doc.push_back(generalNode);
-    doc.write(writeFile( getAssetPath("assets") / fs::path("crazy_config.xml")) );
+    mConfig = ConfigManager::create();
+
+    mConfig->newNode("First Set");
+    mConfig->addParam( "Cube Size", &mObjSize, false).min(0.1f).max(20.5f).step(0.1f);
+    mConfig->addParam( "Cube Rotation", &mObjOrientation ); // Quatf type
+    mConfig->addParam( "Cube Color", &mColor, false); // ColorA
+    mConfig->addParam( "Light Direction", &mLightDirection, false); // Vec3f
+    mConfig->addParam( "String ", &mString, false); // string
+
+    mConfig->newNode("Second Set");
+    
+    mConfig->newNode("Third Set");
+    
 }
 
 void CinderCookbookApp::update()
@@ -110,8 +88,8 @@ void CinderCookbookApp::draw()
     // restore transform
     gl::popModelView();
     gl::disableAlphaBlending();
-    
-    mParams.draw();
+
+    mConfig->draw();
 }
 
 

@@ -6,9 +6,10 @@
 #include "cinder/Xml.h"
 #include "cinder/ImageIO.h"
 #include "cinder/gl/Texture.h"
-#include "cinder/params/Params.h"
 #include "cinder/Utilities.h"
-#include "cinder/Xml.h"
+
+#include "Configurations.h"
+
 
 #include <string>
 #include <list>
@@ -17,6 +18,7 @@
 using namespace ci;
 using namespace ci::app;
 using namespace std;
+
 
 class CinderCookbookApp : public AppNative {
 
@@ -38,8 +40,7 @@ public:
 
     void transform();
     void fileDrop( FileDropEvent event );
-    void loadConfig();
-    void saveConfig();
+
     
     int mCamWidth;
     int mCamHeight;
@@ -60,9 +61,13 @@ public:
     Quatf mObjOrientation;
     Vec3f mLightDirection;
 
-    params::InterfaceGl mParams;
+//    params::InterfaceGl mParams;
     string mString;
 
     string mHostIP;
     int mHostPort;
+    
+    ConfigManagerRef mConfig;
+    
+
 };
