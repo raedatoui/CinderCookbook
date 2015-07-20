@@ -38,6 +38,7 @@ enum ConfigParamTypes
     _FLOAT,
     _DOUBLE,
     _INT,
+    _VEC2F,
     _VEC3F,
     _QUATF,
     _COLOR,
@@ -50,6 +51,7 @@ enum ConfigParamTypes
 
 class ConfigParam
 {
+    
 public:
     ConfigParam(const std::string &aName, void* aParam, ConfigParamTypes aType)
     {
@@ -89,35 +91,39 @@ typedef std::shared_ptr<ConfigManager> ConfigManagerRef;
 
 class ConfigManager
 {
-
-typedef std::shared_ptr<ConfigManager> ConfigManagerRef;
     
 public:
+  
     static ConfigManagerRef create() { return std::make_shared<ConfigManager>(); }
 
     ConfigManager();
   
-    
     //-----------------------------------------------------------------------------
-    
     void save();
     void load(fs::path filePath);
     void draw();
     void addButton( const std::string &name, const std::function<void()> &callback, const std::string &optionsStr = "" );
+    
     //-----------------------------------------------------------------------------
     
     template <typename T>
     params::InterfaceGl::Options<T> addParam( const std::string &name, T *target, bool readOnly = false, const std::string &keyName = "" );
-    
+
+    void addParam( const std::string &name, Vec2f *vectorParam, bool readOnly = false, const std::string &keyName = "" );
+    void addParam( const std::string &name, const std::vector<std::string> &enumNames, int *param, const std::string &optionsStr = "", bool readOnly = false, const std::string &keyName = "" );
+
     void newNode( const std::string &name, const std::string &optionsStr = "" );
+    //-----------------------------------------------------------------------------
     
     
 protected:
-    // new API
+    
     template <typename T>
     params::InterfaceGl::Options<T>    addParamImpl( const std::string &name, T *target, ConfigParamTypes aType, bool readOnly, const std::string &keyName = "" );
     
     void addConfigParam( const std::string &name, const std::string &keyName, void* param, ConfigParamTypes type);
+    //-----------------------------------------------------------------------------
+    
     
     std::vector<ConfigParam> mConfigParameters;
     params::InterfaceGlRef   mVisualParams;

@@ -19,6 +19,5 @@ string Utils::getCurrentTimestamp() {
 }
 
 fs::path Utils::getAssetsDirectoryPath() {
-    
     return fs::path(getPathDirectory(getAssetPath(fs::path(".gitignore")).string()));
 }

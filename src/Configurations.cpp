@@ -17,7 +17,6 @@ ConfigManager::ConfigManager() {
     mVisualParams->addButton("Save Config", std::bind(&ConfigManager::save, this) );
 }
 
-
 void ConfigManager::save() {
     
     fs::path outputPath = Utils::getAssetsDirectoryPath();
@@ -67,6 +66,11 @@ void ConfigManager::save() {
                 pn.setAttribute<float>("z", (*((Vec3f*)it->param)).z);
                 node.push_back( pn );
                 break;
+            case _VEC2F:
+                pn.setAttribute<float>("x", (*((Vec2f*)it->param)).x);
+                pn.setAttribute<float>("y", (*((Vec2f*)it->param)).y);
+                node.push_back( pn );
+                break;
             case _QUATF:
                 pn.setAttribute<float>("w", (*((Quatf*)it->param)).w);
                 pn.setAttribute<float>("x", (*((Quatf*)it->param)).v.x);
@@ -104,66 +108,68 @@ void ConfigManager::save() {
 // using the types specified in AntTweakBar.h (TW_TYPE_FLOAT, instead of _FLOAT)
 // might be more a more accurate match to what's Params.h supports
 
-template <> params::InterfaceGl::Options<bool> ConfigManager::addParam( const std::string &name, bool *param, bool readOnly, const std::string &keyName ) {
-    return addParamImpl( name, param, _BOOL, readOnly, keyName ); }
+template <> params::InterfaceGl::Options<bool>      ConfigManager::addParam( const std::string &name, bool *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _BOOL, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<char>  ConfigManager::addParam( const std::string &name, char *param, bool readOnly, const std::string &keyName ) {
-    return addParamImpl( name, param, _STRING, readOnly, keyName ); }
+template <> params::InterfaceGl::Options<char>      ConfigManager::addParam( const std::string &name, char *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _STRING, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<int8_t>    ConfigManager::addParam( const std::string &name, int8_t *param, bool readOnly, const std::string &keyName ) {
-    return addParamImpl( name, param, _INT, readOnly, keyName ); }
+template <> params::InterfaceGl::Options<int8_t>    ConfigManager::addParam( const std::string &name, int8_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<uint8_t>    ConfigManager::addParam( const std::string &name, uint8_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName ); }
+template <> params::InterfaceGl::Options<uint8_t>   ConfigManager::addParam( const std::string &name, uint8_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<int16_t>    ConfigManager::addParam( const std::string &name, int16_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName ); }
+template <> params::InterfaceGl::Options<int16_t>   ConfigManager::addParam( const std::string &name, int16_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<uint16_t>    ConfigManager::addParam( const std::string &name, uint16_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName ); }
+template <> params::InterfaceGl::Options<uint16_t>  ConfigManager::addParam( const std::string &name, uint16_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<int32_t>    ConfigManager::addParam( const std::string &name, int32_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<int32_t>   ConfigManager::addParam( const std::string &name, int32_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<uint32_t>    ConfigManager::addParam( const std::string &name, uint32_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<uint32_t>  ConfigManager::addParam( const std::string &name, uint32_t *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _INT, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<float>        ConfigManager::addParam( const std::string &name, float *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _FLOAT, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<float>     ConfigManager::addParam( const std::string &name, float *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _FLOAT, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<double>    ConfigManager::addParam( const std::string &name, double *param, bool readOnly, const std::string &keyName ) {
-    return addParamImpl( name, param, _DOUBLE, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<double>    ConfigManager::addParam( const std::string &name, double *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _DOUBLE, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<string>    ConfigManager::addParam( const std::string &name, string *param, bool readOnly, const std::string &keyName ) {
-    return addParamImpl( name, param, _STRING, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<string>    ConfigManager::addParam( const std::string &name, string *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _STRING, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<Color>        ConfigManager::addParam( const std::string &name, Color *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _COLOR, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<Color>     ConfigManager::addParam( const std::string &name, Color *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _COLOR, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<ColorA>    ConfigManager::addParam( const std::string &name, ColorA *param, bool readOnly, const std::string &keyName ) {
-    return addParamImpl( name, param, _COLORA, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<ColorA>    ConfigManager::addParam( const std::string &name, ColorA *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _COLORA, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<Quatf>        ConfigManager::addParam( const std::string &name, Quatf *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _QUATF, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<Quatf>     ConfigManager::addParam( const std::string &name, Quatf *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _QUATF, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<Quatd>        ConfigManager::addParam( const std::string &name, Quatd *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _QUATF, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<Quatd>     ConfigManager::addParam( const std::string &name, Quatd *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _QUATF, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<Vec3f>        ConfigManager::addParam( const std::string &name, Vec3f *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _VEC3F, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<Vec3f>     ConfigManager::addParam( const std::string &name, Vec3f *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _VEC3F, readOnly, keyName ); }
 
-template <> params::InterfaceGl::Options<Vec3d>        ConfigManager::addParam( const std::string &name, Vec3d *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _VEC3F, readOnly, keyName  ); }
+template <> params::InterfaceGl::Options<Vec3d>     ConfigManager::addParam( const std::string &name, Vec3d *param, bool readOnly, const std::string &keyName ) { return addParamImpl( name, param, _VEC3F, readOnly, keyName ); }
 
-template <typename T>
-
-params::InterfaceGl::Options<T>    ConfigManager::addParamImpl( const std::string &name, T *target, ConfigParamTypes aType, bool readOnly, const std::string &keyName )
-{
-    // should check for params initialized?
+template <typename T> params::InterfaceGl::Options<T> ConfigManager::addParamImpl( const std::string &name, T *target, ConfigParamTypes aType, bool readOnly, const std::string &keyName ) {
     addConfigParam(name, keyName, target, aType);
     return mVisualParams->addParam(name, target, readOnly);
 }
 
-void ConfigManager::newNode( const std::string &name, const std::string &optionsStr )
-{
+void ConfigManager::newNode( const std::string &name, const std::string &optionsStr ) {
     mVisualParams->addSeparator();
     mVisualParams->addText(name, optionsStr);
     mConfigParameters.push_back( ConfigParam(name, 0, _NODE) );
 }
 
-//-----------------------------------------------------------------------------
 
-void ConfigManager::addConfigParam( const std::string &name, const std::string &keyName, void* param, ConfigParamTypes type)
-{
+// Depreacted Params API -------------------------------------------------------------------
+
+void ConfigManager::addParam( const std::string &name, Vec2f *param, bool readOnly, const std::string &keyName) {
+    addConfigParam(name, keyName, param, _VEC2F);
+    mVisualParams->addParam( name + " X", &param->x, readOnly );
+    mVisualParams->addParam( name + " Y", &param->y, readOnly );
+}
+
+void ConfigManager::addParam( const std::string &name, const std::vector<std::string> &enumNames, int *param, const std::string &optionsStr, bool readOnly, const std::string &keyName ) {
+    mVisualParams->addParam(name, enumNames, param, optionsStr, readOnly);
+    addConfigParam(name, keyName, param, _INT);
+}
+
+//-----------------------------------------------------------------------------------------
+
+void ConfigManager::addConfigParam( const std::string &name, const std::string &keyName, void* param, ConfigParamTypes type) {
     std::string _keyName;
     (keyName == "") ? _keyName = name : _keyName = keyName;
     mConfigParameters.push_back( ConfigParam(_keyName, param, type) );

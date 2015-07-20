@@ -6,30 +6,40 @@ void CinderCookbookApp::setup()
     mCamHeight = 480;
     mCapture = Capture(mCamWidth, mCamHeight);
     
-    mPosition.x = (float)getWindowWidth() / 2.0f;
-    mPosition.y = (float)getWindowHeight() / 2.0f;
-    mDragOffset = Vec2f::zero();
-    mColor = Color::white();
-    mRadius = 100.0f;
-    mScale = 1.0f;
-    mDragged = false;
-    
-    mHostIP = "127.0.0.1";
-    mHostPort = 1234;
     
     mConfig = ConfigManager::create();
 
-    mConfig->newNode("First Set");
-    mConfig->addParam( "Cube Size", &mObjSize, false).min(0.1f).max(20.5f).step(0.1f);
-    mConfig->addParam( "Cube Rotation", &mObjOrientation ); // Quatf type
-    mConfig->addParam( "Cube Color", &mColor, false); // ColorA
+    mConfig->newNode("Scene");
+    mColor = Color::white();
+    mConfig->addParam( "Color", &mColor, false); // ColorA
     mConfig->addParam( "Light Direction", &mLightDirection, false); // Vec3f
     mConfig->addParam( "String ", &mString, false); // string
+    
+    mConfig->newNode("Cube");
+    mConfig->addParam( "Cube Size", &mObjSize, false).min(0.1f).max(20.5f).step(0.1f);
+    mConfig->addParam( "Cube Rotation", &mObjOrientation );
 
-    mConfig->newNode("Second Set");
     
-    mConfig->newNode("Third Set");
+    mConfig->newNode("Circle");
+    mPosition.x = (float)getWindowWidth() / 2.0f;
+    mPosition.y = (float)getWindowHeight() / 2.0f;
+    mConfig->addParam( "pos", &mPosition, false);
     
+    mDragOffset = Vec2f::zero();
+    mConfig->addParam( "drag offset", &mDragOffset, false);
+    
+    mRadius = 100.0f;
+    mConfig->addParam( "radius", &mRadius, false);
+    
+    mScale = 1.0f;
+    mConfig->addParam( "mScale", &mScale, false).min(0.0f).step(0.1f);
+ 
+    enumNames.push_back( "Orange" );
+    enumNames.push_back( "Apple" );
+    enumNames.push_back( "Banana" );
+    enumValue = 0;
+    mConfig->addParam("Enum type parameter", enumNames, &enumValue);
+
 }
 
 void CinderCookbookApp::update()

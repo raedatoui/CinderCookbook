@@ -30,7 +30,6 @@ public:
     void draw();
     void shutdown();
 
-
     void mouseDown( MouseEvent event );
     void mouseUp( MouseEvent event );
     void mouseWheel( MouseEvent event );
@@ -42,32 +41,32 @@ public:
     void fileDrop( FileDropEvent event );
 
     
+    // camera
     int mCamWidth;
     int mCamHeight;
     Capture mCapture;
-
-    Vec2f   mPosition, mDragOffset;
-    float mRadius;
-    float mScale;
-    ColorA mColor;
-    bool mDragged;
-    ci::Matrix44f mTransform;
-    Rectf mRect;
-
+    
+    //drag drop images
     vector< gl::Texture > mTextures;
     
-    
-    float mObjSize;
-    Quatf mObjOrientation;
-    Vec3f mLightDirection;
-
-//    params::InterfaceGl mParams;
-    string mString;
-
-    string mHostIP;
-    int mHostPort;
-    
+    // configuration / interfacegl manager
     ConfigManagerRef mConfig;
     
+    // parameters to manage
+    Vec2f           mPosition;
+    Vec2f           mDragOffset;
+    float           mRadius;
+    float           mScale;
+    ColorA          mColor;
+    Matrix44f       mTransform;
+    Rectf           mRect;
+    float           mObjSize;
+    Quatf           mObjOrientation;
+    Vec3f           mLightDirection;
+    string          mString;
+    vector<string>	enumNames;
+    int				enumValue;
+    
+    bool        mDragged;
 
 };
