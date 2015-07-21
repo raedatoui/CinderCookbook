@@ -21,85 +21,105 @@ void ConfigManager::save() {
     
     fs::path outputPath = Utils::getAssetsDirectoryPath();
     string timeStamp = Utils::getCurrentTimestamp();
-    fs::path filePath = outputPath / fs::path(timeStamp + ".xml");
+    fs::path filePath = outputPath / fs::path(timeStamp + ".json");
     
-    std::string myXmlStr( "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" );
-    XmlTree doc(myXmlStr);
-    XmlTree node;
-    node.setTag("general");
+//    std::string myXmlStr( "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" );
+//    XmlTree doc(myXmlStr);
+//    XmlTree node;
+//    node.setTag("general");
+    
+    
+    JsonTree doc;
+    JsonTree node;
     
     for(std::vector<ConfigParam>::iterator it = mConfigParameters.begin(); it!=mConfigParameters.end(); ++it)
     {
-        XmlTree pn;
-        pn.setTag(it->name);
+        
+        JsonTree pn;
+        
+        console() << node.getKey() << " " << it->name <<  endl;
         
         switch(it->type)
         {
             case _NODE:
-                doc.push_back( node );
-                node = XmlTree();
-                node.setTag(it->name);
+                // cant check if node is initialized
+                //
+                if(doc.getNumChildren() > 0) {
+                    doc.addChild(node);
+                }
+                node = JsonTree::makeObject(it->name);
+
+                if(doc.getNumChildren() == 0) {
+                    doc.addChild(node);
+                }
+                
                 break;
             case _BOOL:
                 if( *((bool*)it->param) ) {
-                    pn.setValue<int>( 1 );
+                    pn = JsonTree( it->name, 1 );
+
                 } else {
-                    pn.setValue<int>( 0 );
+                    pn = JsonTree( it->name, 0 );
                 }
-                node.push_back( pn );
+                node.addChild( pn );
                 break;
             case _FLOAT:
-                pn.setValue<float>( *((float*)it->param) );
-                node.push_back( pn );
+                pn = JsonTree( it->name, *((float*)it->param)  );
+                node.addChild( pn );
                 break;
             case _DOUBLE:
-                pn.setValue<double>( *((double*)it->param) );
-                node.push_back( pn );
+                pn = JsonTree( it->name,*((double*)it->param)  );
+                node.addChild( pn );
                 break;
             case _INT:
-                pn.setValue<int>( *((int*)it->param) );
-                node.push_back( pn );
+                pn = JsonTree( it->name, *((int*)it->param)  );
+                node.addChild( pn );
                 break;
             case _VEC3F:
-                pn.setAttribute<float>("x", (*((Vec3f*)it->param)).x);
-                pn.setAttribute<float>("y", (*((Vec3f*)it->param)).y);
-                pn.setAttribute<float>("z", (*((Vec3f*)it->param)).z);
-                node.push_back( pn );
+                pn = JsonTree::makeObject( it->name )
+                .addChild(JsonTree("x", (*((Vec3f*)it->param)).x))
+                .addChild(JsonTree("y", (*((Vec3f*)it->param)).y))
+                .addChild(JsonTree("z", (*((Vec3f*)it->param)).z));
+                node.addChild( pn );
                 break;
             case _VEC2F:
-                pn.setAttribute<float>("x", (*((Vec2f*)it->param)).x);
-                pn.setAttribute<float>("y", (*((Vec2f*)it->param)).y);
-                node.push_back( pn );
+                pn = JsonTree::makeObject( it->name )
+                .addChild(JsonTree("x", (*((Vec2f*)it->param)).x))
+                .addChild(JsonTree("y", (*((Vec2f*)it->param)).y));
+                node.addChild( pn );
                 break;
             case _QUATF:
-                pn.setAttribute<float>("w", (*((Quatf*)it->param)).w);
-                pn.setAttribute<float>("x", (*((Quatf*)it->param)).v.x);
-                pn.setAttribute<float>("y", (*((Quatf*)it->param)).v.y);
-                pn.setAttribute<float>("z", (*((Quatf*)it->param)).v.z);
-                node.push_back( pn );
+                pn = JsonTree::makeObject( it->name )
+                .addChild(JsonTree("w", (*((Quatf*)it->param)).w))
+                .addChild(JsonTree("x", (*((Quatf*)it->param)).v.x))
+                .addChild(JsonTree("y", (*((Quatf*)it->param)).v.y))
+                .addChild(JsonTree("z", (*((Quatf*)it->param)).v.z));
+                node.addChild( pn );
                 break;
             case _COLOR:
-                pn.setAttribute<float>("r", (*((Color*)it->param)).r);
-                pn.setAttribute<float>("g", (*((Color*)it->param)).g);
-                pn.setAttribute<float>("b", (*((Color*)it->param)).b);
-                node.push_back( pn );
+                pn = JsonTree::makeObject( it->name )
+                .addChild(JsonTree("r", (*((Color*)it->param)).r))
+                .addChild(JsonTree("g", (*((Color*)it->param)).g))
+                .addChild(JsonTree("b", (*((Color*)it->param)).b));
+                node.addChild( pn );
                 break;
             case _COLORA:
-                pn.setAttribute<float>("r", (*((ColorA*)it->param)).r);
-                pn.setAttribute<float>("g", (*((ColorA*)it->param)).g);
-                pn.setAttribute<float>("b", (*((ColorA*)it->param)).b);
-                pn.setAttribute<float>("a", (*((ColorA*)it->param)).a);
-                node.push_back( pn );
+                pn = JsonTree::makeObject( it->name )
+                .addChild(JsonTree("r", (*((ColorA*)it->param)).r))
+                .addChild(JsonTree("g", (*((ColorA*)it->param)).g))
+                .addChild(JsonTree("b", (*((ColorA*)it->param)).b))
+                .addChild(JsonTree("a", (*((ColorA*)it->param)).a));
+                node.addChild( pn );
                 break;
             case _STRING:
-                pn.setValue<std::string>( *((std::string*)it->param) );
-                node.push_back( pn );
+                pn = JsonTree( it->name, *((std::string*)it->param)  );
+                node.addChild( pn );
                 break;
         }
     }
     
-    doc.push_back( node );
-    doc.write(writeFile(filePath));
+    doc.addChild(node);
+    doc.write(filePath);
 }
 
 // New Params API -------------------------------------------------------------------

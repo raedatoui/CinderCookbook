@@ -15,6 +15,7 @@
 #include "cinder/Function.h"
 #include "cinder/params/Params.h"
 #include "cinder/Xml.h"
+#include "cinder/Json.h"
 
 #include "Utils.h"
 
