@@ -53,6 +53,8 @@ public:
     ConfigManagerRef mConfig;
     
     // parameters to manage
+    bool            mShowThings;
+    double          mAmount;
     Vec2f           mPosition;
     Vec2f           mDragOffset;
     float           mRadius;
@@ -64,9 +66,9 @@ public:
     Quatf           mObjOrientation;
     Vec3f           mLightDirection;
     string          mString;
-    vector<string>	enumNames;
-    int				enumValue;
+    vector<string>	mEnumNames;
+    int				mEnumValue;
     
     bool        mDragged;
-
+    
 };

@@ -34,11 +34,15 @@ void CinderCookbookApp::setup()
     mScale = 1.0f;
     mConfig->addParam( "mScale", &mScale, false).min(0.0f).step(0.1f);
  
-    enumNames.push_back( "Orange" );
-    enumNames.push_back( "Apple" );
-    enumNames.push_back( "Banana" );
-    enumValue = 0;
-    mConfig->addParam("Enum type parameter", enumNames, &enumValue);
+    mEnumNames.push_back( "Orange" );
+    mEnumNames.push_back( "Apple" );
+    mEnumNames.push_back( "Banana" );
+    mEnumValue = 0;
+    mConfig->addParam("Enum type parameter", mEnumNames, &mEnumValue);
+    
+    mConfig->newNode("Stuff");
+    mConfig->addParam("A bool", &mShowThings);
+    mConfig->addParam("a double", &mAmount);
 
 }
 
